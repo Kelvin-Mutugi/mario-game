@@ -25,6 +25,10 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        if event.type == pygame.MOUSEMOTION:
+            if player_rectangle.collidepoint(event.pos) : print('mouse hover')
+
+
     screen.blit(sky_surface, (0,0))
     screen.blit(ground_surface, (0,300))
     screen.blit(text_surface, (345,50))
@@ -32,8 +36,8 @@ while True:
     gost_rectangle.left -= 4
     if gost_rectangle.right < 0 : gost_rectangle.left = 800
 
-    if gost_rectangle.left <= player_rectangle.right : player_rectangle.bottom = 280
-    elif gost_rectangle.left > player_rectangle.right : player_rectangle.bottom = 355
+    if player_rectangle.colliderect(gost_rectangle):
+        print('')
     
 
     screen.blit(gost_surface, gost_rectangle)
