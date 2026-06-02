@@ -28,10 +28,8 @@ while True:
     screen.blit(sky_surface, (0,0))
     screen.blit(ground_surface, (0,300))
     screen.blit(text_surface, (345,50))
-    if gost_rectangle.left < -68:
-        gost_rectangle.left = 800
-    else:
-        gost_rectangle.left -=3
+    if gost_rectangle.left < -68:gost_rectangle.left = 800
+    gost_rectangle.left -=3
 
     screen.blit(gost_surface, gost_rectangle)
     screen.blit(player_surface, player_rectangle)
