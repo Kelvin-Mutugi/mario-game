@@ -19,16 +19,23 @@ gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
 #gost_y_position = 295
 gost_rectangle = gost_surface.get_rect(topleft = (734,290))
 
+player_gravity = 0
 player_surface = pygame.image.load('graphics/mario.png').convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
+
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.MOUSEMOTION:
-            if player_rectangle.collidepoint(event.pos) : print('mouse hover')
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if player_rectangle.collidepoint(event.pos):
+                player_gravity = -20
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player_gravity = -20
+            
 
 
     screen.blit(sky_surface, (0,0))
@@ -39,15 +46,21 @@ while True:
     #pygame.draw.line(screen, 'red', (0,0), (800,400), width=1)
     #pygame.draw.ellipse(screen, 'Red', pygame.Rect(50,50, 100,100))
 
-    gost_rectangle.left -= 4
+    gost_rectangle.left -=4
     if gost_rectangle.right < 0 : gost_rectangle.left = 800
 
     #if player_rectangle.colliderect(gost_rectangle):
      #   print('')
     
-
     screen.blit(gost_surface, gost_rectangle)
+
+    #PLAYER
+    player_gravity += 1
+    player_rectangle.y += player_gravity
     screen.blit(player_surface, player_rectangle)
+
+    
+
 
 
 
