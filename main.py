@@ -22,8 +22,9 @@ gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
 #gost_y_position = 295
 gost_rectangle = gost_surface.get_rect(topleft = (734,290))
 
+player_character = 'graphics/player/mario_1.png'
 player_gravity = 0
-player_surface = pygame.image.load('graphics/mario.png').convert_alpha()
+player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
 
 game_active = True
