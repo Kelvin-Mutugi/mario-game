@@ -57,7 +57,9 @@ while True:
     #PLAYER
     player_gravity += 1
     player_rectangle.y += player_gravity
+    if player_rectangle.bottom >= 355 : player_rectangle.bottom = 355
     screen.blit(player_surface, player_rectangle)
+    
 
     
 
