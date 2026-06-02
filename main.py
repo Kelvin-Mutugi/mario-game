@@ -61,7 +61,7 @@ while True:
         #pygame.draw.line(screen, 'red', (0,0), (800,400), width=1)
         #pygame.draw.ellipse(screen, 'Red', pygame.Rect(50,50, 100,100))
 
-        gost_rectangle.left -=4
+        gost_rectangle.left -= 5
         if gost_rectangle.right < 0 : gost_rectangle.left = 800
 
         #if player_rectangle.colliderect(gost_rectangle):
