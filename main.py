@@ -18,9 +18,11 @@ Game_over_surface = text_font.render('GAME OVER', False, 'Green')
 Game_over_rect = Game_over_surface.get_rect(center = (400, 200))
 
 gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
+gost_surface2 = pygame.image.load('graphics/gost.png').convert_alpha()
 #gost_x_position = 734
 #gost_y_position = 295
 gost_rectangle = gost_surface.get_rect(topleft = (734,290))
+gost_rectangle2 = gost_surface2.get_rect(top = 150)
 
 player_character = 'graphics/player/mario_1.png'
 player_gravity = 0
@@ -47,9 +49,11 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                     game_active = True
                     gost_rectangle.left = 800         
+                    gost_rectangle2.left = 900
             if event.type == pygame.KEYDOWN and pygame.K_SPACE:
                     game_active = True
                     gost_rectangle.left = 800
+                    gost_rectangle2.left = 900
 
                 
 
@@ -62,13 +66,15 @@ while True:
         #pygame.draw.line(screen, 'red', (0,0), (800,400), width=1)
         #pygame.draw.ellipse(screen, 'Red', pygame.Rect(50,50, 100,100))
 
+        #ENEMYS
         gost_rectangle.left -= 5
         if gost_rectangle.right < 0 : gost_rectangle.left = 800
-
         #if player_rectangle.colliderect(gost_rectangle):
-        #   print('')
-        
+        #   print('')   
         screen.blit(gost_surface, gost_rectangle)
+        gost_rectangle2.left -= 5
+        if gost_rectangle2.right < -20 : gost_rectangle2.left = 800
+        screen.blit(gost_surface2, gost_rectangle2)
 
         #PLAYER
         player_gravity += 1
@@ -79,6 +85,9 @@ while True:
         #COLLISION
         if gost_rectangle.colliderect(player_rectangle):
             game_active = False
+        if gost_rectangle2.colliderect(player_rectangle):
+             game_active = False
+
     else:
         screen.blit(sky_surface, (0,0))
         pygame.draw.rect(screen, 'Red', Game_over_rect)
