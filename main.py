@@ -19,7 +19,11 @@ start_instructions_font = pygame.font.Font(None, 40)
 player_character = 'graphics/player/mario_1.png'
 
 sky_surface = pygame.image.load('graphics/backgroung.png').convert()
-ground_surface = pygame.image.load('graphics/road.png').convert()
+ground_surface_1 = pygame.image.load('graphics/road.png').convert()
+ground_surface_2 = pygame.image.load('graphics/road.png').convert()
+ground_surface_1_rect = ground_surface_1.get_rect(topleft = (0,300))
+ground_surface_2_rect = ground_surface_2.get_rect(topleft = (800,300))
+ground_surface_speed = 1
 
 start_time = 0
 
@@ -56,6 +60,23 @@ player_rectangle = player_surface.get_rect(midbottom = (80,355))
 
 game_active = True
 
+def ground_movement():
+     ground_surface_1_rect.x -= ground_surface_speed
+     ground_surface_2_rect.x -= ground_surface_speed
+
+     if (ground_surface_1_rect.right < 0):
+          ground_surface_1_rect.x = 798
+     if (ground_surface_2_rect.right < 0):
+          ground_surface_2_rect.x = 800
+    
+          
+
+     screen.blit(ground_surface_2, ground_surface_2_rect)
+     screen.blit(ground_surface_1, ground_surface_1_rect)
+
+
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -84,11 +105,8 @@ while True:
 
     if game_active:
         screen.blit(sky_surface, (0,0))
-        screen.blit(ground_surface, (0,300))
+        ground_movement()
         display_score()
-
-        #pygame.draw.line(screen, 'red', (0,0), (800,400), width=1)
-        #pygame.draw.ellipse(screen, 'Red', pygame.Rect(50,50, 100,100))
 
         #ENEMYS
         gost_rectangle.left -= 6
@@ -98,7 +116,7 @@ while True:
         screen.blit(gost_surface, gost_rectangle)
         
 
-        #PLAYER
+        #PLAYER animation
         if is_moving:
              current_frame_index += animation_speed
              if current_frame_index >= len(walk_frames):
