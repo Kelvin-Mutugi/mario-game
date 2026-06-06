@@ -75,7 +75,7 @@ while True:
         
         #gost_rectangle2.left -= 5
         #if gost_rectangle2.right < -20 : gost_rectangle2.left = 800
-        #screen.blit(gost_surface2, gost_rectangle2)
+        screen.blit(gost_surface2, gost_rectangle2)
 
         #PLAYER
         player_gravity += 1
