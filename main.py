@@ -18,8 +18,16 @@ start_instructions_font = pygame.font.Font(None, 40)
 
 player_character = 'graphics/player/mario_1.png'
 
-sky_surface = pygame.image.load('graphics/backgroung.png').convert()
-ground_surface = pygame.image.load('graphics/road.png').convert()
+sky_surface_1 = pygame.image.load('graphics/backgroung.png').convert()
+sky_surface_2 = pygame.image.load('graphics/backgroung.png').convert()
+sky_surface_1_rect = sky_surface_1.get_rect(left = 0)
+sky_surface_2_rect = sky_surface_2.get_rect(left = 800)
+sky_surface_speed = 3
+ground_surface_1 = pygame.image.load('graphics/road.png').convert()
+ground_surface_2 = pygame.image.load('graphics/road.png').convert()
+ground_surface_1_rect = ground_surface_1.get_rect(topleft = (0,300))
+ground_surface_2_rect = ground_surface_2.get_rect(topleft = (800,300))
+ground_surface_speed = 2
 
 start_time = 0
 
@@ -33,18 +41,51 @@ game_over_character_rect = game_over_character.get_rect(center = (380,190))
 game_over_start_msg = start_instructions_font.render('press space or click on the screen to start', False, 'Green')
 game_over_start_msg_rect = game_over_start_msg.get_rect(center=(400, 350))
 
-
-#game_over_start_msg = start_instructions_font.render('press space or click on the screen to start', False, 'Green')
-#game_over_start_msg_rect = game_over_start_msg.get_rect(topleft = (0, 0))
-
 gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
 gost_rectangle = gost_surface.get_rect(topleft = (734,290))
+
+walk_frames = [
+     pygame.image.load('graphics/player/mario_1.png').convert_alpha(),
+     pygame.image.load('graphics/player/mario_2.png').convert_alpha(),
+     #pygame.image.load('graphics/player/mario_3.png').convert_alpha(), //makes the runing animation look alittle weird
+
+]
+current_frame_index = 0.0  # Must be a float to control animation speed
+animation_speed = 0.15     # Controls how fast frames switch
+is_moving = True
 
 player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
 
 game_active = True
+
+def sky_movement():
+     sky_surface_1_rect.x -= sky_surface_speed
+     sky_surface_2_rect.x -= sky_surface_speed
+
+     if (sky_surface_1_rect.right < 0):
+          sky_surface_1_rect.left = 800
+     if (sky_surface_2_rect.right < 0):
+          sky_surface_2_rect.left = 800  
+     
+     screen.blit(sky_surface_1, sky_surface_1_rect)
+     screen.blit(sky_surface_2, sky_surface_2_rect)
+
+def ground_movement():
+     ground_surface_1_rect.x -= ground_surface_speed
+     ground_surface_2_rect.x -= ground_surface_speed
+
+     if (ground_surface_1_rect.right < 0):
+          ground_surface_1_rect.left = 798
+     if (ground_surface_2_rect.right < 0):
+          ground_surface_2_rect.left = 800  
+     
+     screen.blit(ground_surface_1, ground_surface_1_rect)
+     screen.blit(ground_surface_2, ground_surface_2_rect)
+
+
+
 
 while True:
     for event in pygame.event.get():
@@ -64,29 +105,32 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                     game_active = True
                     gost_rectangle.left = 800
+                    is_moving = True
                     start_time = pygame.time.get_ticks()/1000
             if event.type == pygame.KEYDOWN and pygame.K_SPACE:
                     game_active = True
                     gost_rectangle.left = 800
+                    is_moving = True
                     start_time = pygame.time.get_ticks()/1000            
 
     if game_active:
-        screen.blit(sky_surface, (0,0))
-        screen.blit(ground_surface, (0,300))
+        sky_movement()
+        ground_movement()
         display_score()
-
-        #pygame.draw.line(screen, 'red', (0,0), (800,400), width=1)
-        #pygame.draw.ellipse(screen, 'Red', pygame.Rect(50,50, 100,100))
 
         #ENEMYS
         gost_rectangle.left -= 6
         if gost_rectangle.right < 0 : gost_rectangle.left = 800
-        #if player_rectangle.colliderect(gost_rectangle):
-        #   print('')   
         screen.blit(gost_surface, gost_rectangle)
         
 
-        #PLAYER
+        #PLAYER animation
+        if is_moving:
+             current_frame_index += animation_speed
+             if current_frame_index >= len(walk_frames):
+                  current_frame_index = 0.0
+
+        player_surface = walk_frames[int(current_frame_index)]           
         player_gravity += 1
         player_rectangle.y += player_gravity
         if player_rectangle.bottom >= 355 : player_rectangle.bottom = 355
@@ -97,7 +141,7 @@ while True:
             game_active = False
 
     else:
-        screen.blit(sky_surface, (0,0))
+        screen.blit(sky_surface_1, (0,0))
         screen.blit(Game_over_surface, Game_over_rect)
         screen.blit(game_over_character_scaled, game_over_character_rect)
         screen.blit(game_over_start_msg, game_over_start_msg_rect)
