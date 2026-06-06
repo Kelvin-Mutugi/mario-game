@@ -14,7 +14,7 @@ ground_surface = pygame.image.load('graphics/road.png').convert()
 score_surface = text_font.render('My Game', False, 'Green')
 score_rect = score_surface.get_rect(center = (400, 50))
 
-Game_over_surface = text_font.render('GAME OVER', False, 'Green')
+Game_over_surface = text_font.render(f'Score', False, 'Green')
 Game_over_rect = Game_over_surface.get_rect(center = (400, 200))
 
 gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
@@ -29,7 +29,7 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
 
-game_active = True
+game_active = False
 
 while True:
     for event in pygame.event.get():
