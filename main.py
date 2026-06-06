@@ -44,7 +44,7 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
 
-game_active = False
+game_active = True
 
 while True:
     for event in pygame.event.get():
