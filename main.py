@@ -40,6 +40,16 @@ game_over_start_msg_rect = game_over_start_msg.get_rect(center=(400, 350))
 gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
 gost_rectangle = gost_surface.get_rect(topleft = (734,290))
 
+walk_frames = [
+     pygame.image.load('graphics/player/mario_1.png').convert_alpha(),
+     pygame.image.load('graphics/player/mario_2.png').convert_alpha(),
+     pygame.image.load('graphics/player/mario_3.png').convert_alpha(),
+
+]
+current_frame_index = 0.0  # Must be a float to control animation speed
+animation_speed = 0.15     # Controls how fast frames switch
+is_moving = True
+
 player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
@@ -64,10 +74,12 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                     game_active = True
                     gost_rectangle.left = 800
+                    is_moving = True
                     start_time = pygame.time.get_ticks()/1000
             if event.type == pygame.KEYDOWN and pygame.K_SPACE:
                     game_active = True
                     gost_rectangle.left = 800
+                    is_moving = True
                     start_time = pygame.time.get_ticks()/1000            
 
     if game_active:
@@ -87,6 +99,13 @@ while True:
         
 
         #PLAYER
+        if is_moving:
+             current_frame_index += animation_speed
+             if current_frame_index >= len(walk_frames):
+                  current_frame_index = 0.0
+
+        player_surface = walk_frames[int(current_frame_index)]           
+
         player_gravity += 1
         player_rectangle.y += player_gravity
         if player_rectangle.bottom >= 355 : player_rectangle.bottom = 355
