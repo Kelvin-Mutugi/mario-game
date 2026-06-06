@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 
+
 def display_score():
      current_time = int(pygame.time.get_ticks()/1000 - start_time)
      score_surf = text_font.render(f'Score: {current_time}', False, 'Green')
@@ -13,22 +14,32 @@ screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 text_font = pygame.font.Font(None, 50)
+start_instructions_font = pygame.font.Font(None, 40)
+
+player_character = 'graphics/player/mario_1.png'
 
 sky_surface = pygame.image.load('graphics/backgroung.png').convert()
 ground_surface = pygame.image.load('graphics/road.png').convert()
 
 start_time = 0
 
-Game_over_surface = text_font.render(f'Score', False, 'Green')
-Game_over_rect = Game_over_surface.get_rect(center = (400, 200))
+Game_over_surface = text_font.render(f'Score:', False, 'Green')
+Game_over_rect = Game_over_surface.get_rect(midtop = (400, 50))
+
+game_over_character = pygame.image.load(player_character).convert_alpha()
+game_over_character_scaled = pygame.transform.scale_by(game_over_character, 1.5)
+game_over_character_rect = game_over_character.get_rect(center = (380,190))
+
+game_over_start_msg = start_instructions_font.render('press space or click on the screen to start', False, 'Green')
+game_over_start_msg_rect = game_over_start_msg.get_rect(center=(400, 350))
+
+
+#game_over_start_msg = start_instructions_font.render('press space or click on the screen to start', False, 'Green')
+#game_over_start_msg_rect = game_over_start_msg.get_rect(topleft = (0, 0))
 
 gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
-gost_surface2 = pygame.image.load('graphics/gost.png').convert_alpha()
-
 gost_rectangle = gost_surface.get_rect(topleft = (734,290))
-gost_rectangle2 = gost_surface2.get_rect(top = 150)
 
-player_character = 'graphics/player/mario_1.png'
 player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
@@ -87,13 +98,9 @@ while True:
 
     else:
         screen.blit(sky_surface, (0,0))
-        pygame.draw.rect(screen, 'Red', Game_over_rect)
-        pygame.draw.rect(screen, 'Red', Game_over_rect, 10)
         screen.blit(Game_over_surface, Game_over_rect)
-
-
-    
-
+        screen.blit(game_over_character_scaled, game_over_character_rect)
+        screen.blit(game_over_start_msg, game_over_start_msg_rect)
 
 
 
