@@ -1,4 +1,4 @@
-# learnpygame 🎮
+# Gosty
 
 A collaborative Pygame project for learning and building fun games together!
 
