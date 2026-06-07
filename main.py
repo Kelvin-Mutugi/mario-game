@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+import random
 
 
 def display_score():
@@ -7,6 +8,7 @@ def display_score():
      score_surf = text_font.render(f'Score: {current_time}', False, 'Green')
      score_rect = score_surf.get_rect(center = (400, 50))
      screen.blit(score_surf,score_rect)
+     return(current_time)
 
 
 pygame.init()
@@ -23,10 +25,10 @@ sky_surface_2 = pygame.image.load('graphics/backgroung.png').convert()
 sky_surface_1_rect = sky_surface_1.get_rect(left = 0)
 sky_surface_2_rect = sky_surface_2.get_rect(left = 800)
 sky_surface_speed = 3
-ground_surface_1 = pygame.image.load('graphics/road.png').convert()
-ground_surface_2 = pygame.image.load('graphics/road.png').convert()
-ground_surface_1_rect = ground_surface_1.get_rect(topleft = (0,300))
-ground_surface_2_rect = ground_surface_2.get_rect(topleft = (800,300))
+ground_surface_1 = pygame.image.load('graphics/road.png').convert_alpha()
+ground_surface_2 = pygame.image.load('graphics/road.png').convert_alpha()
+ground_surface_1_rect = ground_surface_1.get_rect(topleft = (0,344))
+ground_surface_2_rect = ground_surface_2.get_rect(topleft = (800,344))
 ground_surface_speed = 2
 
 start_time = 0
@@ -42,7 +44,8 @@ game_over_start_msg = start_instructions_font.render('press space or click on th
 game_over_start_msg_rect = game_over_start_msg.get_rect(center=(400, 350))
 
 gost_surface = pygame.image.load('graphics/gost.png').convert_alpha()
-gost_rectangle = gost_surface.get_rect(topleft = (734,290))
+gost_rectangle = gost_surface.get_rect(top = 290)
+gost_speed = 6
 
 walk_frames = [
      pygame.image.load('graphics/player/mario_1.png').convert_alpha(),
@@ -84,6 +87,23 @@ def ground_movement():
      screen.blit(ground_surface_1, ground_surface_1_rect)
      screen.blit(ground_surface_2, ground_surface_2_rect)
 
+def game_enemies(current_score):
+     enemy_spawn_position = [290, 250, 240]
+     speed_increase = (current_score // 5) * 1
+     gost_rectangle.left -= gost_speed + speed_increase
+
+     if gost_rectangle.right < 0 :
+          gost_rectangle.left = 800
+          gost_rectangle.top = random.choice(enemy_spawn_position)
+          print(random.choice(enemy_spawn_position))
+
+          
+
+
+     screen.blit(gost_surface, gost_rectangle)
+
+
+
 
 
 
@@ -116,12 +136,10 @@ while True:
     if game_active:
         sky_movement()
         ground_movement()
-        display_score()
+        current_score = display_score()
 
         #ENEMYS
-        gost_rectangle.left -= 6
-        if gost_rectangle.right < 0 : gost_rectangle.left = 800
-        screen.blit(gost_surface, gost_rectangle)
+        game_enemies(current_score)
         
 
         #PLAYER animation
