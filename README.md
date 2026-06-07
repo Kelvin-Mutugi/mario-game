@@ -4,7 +4,7 @@ A collaborative Pygame project for learning and building fun games together!
 
 ## About This Project
 
-**learnpygame** is an open, beginner-friendly game development project built with Python and Pygame. Whether you're new to game development or looking to contribute features, this is the perfect place to learn, collaborate, and have fun.
+**Gosty** is an open, beginner-friendly game development project built with Python and Pygame. Whether you're new to game development or looking to contribute features, this is the perfect place to learn, collaborate, and have fun.
 
 ## Project Goals
 
