@@ -12,6 +12,10 @@ def display_score():
 
 
 pygame.init()
+pygame.mixer.init()
+#SOUNDS
+jump_sound = pygame.mixer.Sound("assets/jump.wav")
+
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
@@ -25,7 +29,7 @@ sky_surface_1 = pygame.image.load('graphics/backgroung.png').convert()
 sky_surface_2 = pygame.image.load('graphics/backgroung.png').convert()
 sky_surface_1_rect = sky_surface_1.get_rect(left=0)
 sky_surface_2_rect = sky_surface_2.get_rect(left=800)
-sky_surface_speed = 3
+sky_surface_speed = 1
 
 # Ground levels — these are the y positions each ground piece can sit at
 ground_low  = 344
@@ -43,16 +47,17 @@ ground_surface_1 = pygame.image.load('graphics/road.png').convert_alpha()
 ground_surface_2 = pygame.image.load('graphics/road.png').convert_alpha()
 ground_surface_1_rect = ground_surface_1.get_rect(topleft=(0, ground_1_level))
 ground_surface_2_rect = ground_surface_2.get_rect(topleft=(800, ground_2_level))
-ground_surface_speed = 2
+ground_surface_speed = 6
 
 
 def ground_movement(current_score):
     # FIX 1 continued: use 'global' on both separate level variables
     global ground_1_level, ground_2_level
     ground_levels = [ground_low, ground_mid, ground_high]
-
-    ground_surface_1_rect.x -= ground_surface_speed
-    ground_surface_2_rect.x -= ground_surface_speed
+    global ground_surface_1_rect
+    global ground_surface_2_rect
+    #ground_surface_1_rect.x -= ground_surface_speed
+    #ground_surface_2_rect.x -= ground_surface_speed
 
     if ground_surface_1_rect.right < 0:
         ground_surface_1_rect.left = ground_surface_2_rect.right
@@ -93,7 +98,7 @@ walk_frames = [
 ]
 current_frame_index = 0.0
 animation_speed = 0.15
-is_moving = True
+is_moving = False
 
 player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
@@ -174,9 +179,6 @@ def player_logic():
 
 
 def sky_movement():
-    sky_surface_1_rect.x -= sky_surface_speed
-    sky_surface_2_rect.x -= sky_surface_speed
-
     if sky_surface_1_rect.right < 0:
         sky_surface_1_rect.left = 800
     if sky_surface_2_rect.right < 0:
@@ -192,13 +194,18 @@ def game_enemies(current_score):
     # Before, the ghost would float at random heights unrelated to where
     # the ground actually was after a level change.
     speed_increase = (current_score // 5) * 1
-    gost_rectangle.left -= gost_speed + speed_increase
 
-    if gost_rectangle.right < 0:
-        gost_rectangle.left = 800
-        # Spawn ghost just above whichever ground piece is coming in from the right.
-        # ground_2_level is the piece currently at x=800 (the incoming piece).
-        gost_rectangle.bottom = ground_2_level
+    if is_moving:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] : gost_rectangle.left -= gost_speed #+ speed_increase
+        if keys[pygame.K_LEFT] : gost_rectangle.left += gost_speed #+ speed_increase
+        
+
+        if gost_rectangle.right < 0:
+            gost_rectangle.left = 800
+            # Spawn ghost just above whichever ground piece is coming in from the right.
+            # ground_2_level is the piece currently at x=800 (the incoming piece).
+            gost_rectangle.bottom = ground_2_level
 
     screen.blit(gost_surface, gost_rectangle)
 
@@ -220,12 +227,12 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and is_player_grounded():
                     player_gravity = -20
+                
 
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 game_active = True
                 gost_rectangle.left = 800
-                is_moving = True
                 # FIX 8: Reset ground levels and player position on restart.
                 # Before, the ground pieces stayed at whatever random level
                 # they were at when the game ended — the player would spawn
@@ -244,7 +251,6 @@ while True:
                 # is always truthy — so ANY key press would restart the game.
                 game_active = True
                 gost_rectangle.left = 800
-                is_moving = True
                 ground_1_level = ground_low
                 ground_2_level = ground_low
                 ground_surface_1_rect.topleft = (0, ground_low)
@@ -259,6 +265,21 @@ while True:
         ground_movement(current_score)
         game_enemies(current_score)
         player_logic()
+        keys = pygame.key.get_pressed()
+        is_moving = keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]
+        if keys[pygame.K_RIGHT]:
+            ground_surface_1_rect.x -= ground_surface_speed
+            ground_surface_2_rect.x -= ground_surface_speed
+            sky_surface_1_rect.x -= sky_surface_speed
+            sky_surface_2_rect.x -= sky_surface_speed
+
+        if keys[pygame.K_LEFT]:
+            ground_surface_1_rect.x += ground_surface_speed
+            ground_surface_2_rect.x += ground_surface_speed
+            sky_surface_1_rect.x += sky_surface_speed
+            sky_surface_2_rect.x += sky_surface_speed
+            
+
 
         if gost_rectangle.colliderect(player_rectangle):
             game_active = False
