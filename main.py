@@ -20,19 +20,47 @@ start_instructions_font = pygame.font.Font(None, 40)
 
 player_character = 'graphics/player/mario_1.png'
 
+#sky
 sky_surface_1 = pygame.image.load('graphics/backgroung.png').convert()
 sky_surface_2 = pygame.image.load('graphics/backgroung.png').convert()
 sky_surface_1_rect = sky_surface_1.get_rect(left = 0)
 sky_surface_2_rect = sky_surface_2.get_rect(left = 800)
 sky_surface_speed = 3
+
+#ground
+ground_low = 344
+ground_mid = 300
+ground_high = 250
+current_ground_level = ground_low
 ground_surface_1 = pygame.image.load('graphics/road.png').convert_alpha()
 ground_surface_2 = pygame.image.load('graphics/road.png').convert_alpha()
-ground_surface_1_rect = ground_surface_1.get_rect(topleft = (0,344))
-ground_surface_2_rect = ground_surface_2.get_rect(topleft = (800,344))
+ground_surface_1_rect = ground_surface_1.get_rect(topleft = (0,current_ground_level))
+ground_surface_2_rect = ground_surface_2.get_rect(topleft = (800,current_ground_level))
 ground_surface_speed = 2
+
+def ground_movement(current_score):
+     global current_ground_level
+     ground_levels = [ground_low, ground_mid, ground_high]
+     ground_surface_1_rect.x -= ground_surface_speed
+     ground_surface_2_rect.x -= ground_surface_speed
+
+     if (ground_surface_1_rect.right < 0):
+          ground_surface_1_rect.left = 798
+          current_ground_level = random.choice(ground_levels)
+          ground_surface_1_rect.top = current_ground_level
+     if (ground_surface_2_rect.right < 0):
+          ground_surface_2_rect.left = 800
+          current_ground_level = random.choice(ground_levels)
+          ground_surface_2_rect.top = current_ground_level
+     
+     screen.blit(ground_surface_1, ground_surface_1_rect)
+     screen.blit(ground_surface_2, ground_surface_2_rect)
+
+
 
 start_time = 0
 
+#game over
 Game_over_surface = text_font.render(f'Score:', False, 'Green')
 Game_over_rect = Game_over_surface.get_rect(midtop = (400, 50))
 
@@ -50,8 +78,6 @@ gost_speed = 6
 walk_frames = [
      pygame.image.load('graphics/player/mario_1.png').convert_alpha(),
      pygame.image.load('graphics/player/mario_2.png').convert_alpha(),
-     #pygame.image.load('graphics/player/mario_3.png').convert_alpha(), //makes the runing animation look alittle weird
-
 ]
 current_frame_index = 0.0  # Must be a float to control animation speed
 animation_speed = 0.15     # Controls how fast frames switch
@@ -61,7 +87,22 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom = (80,355))
 
-game_active = True
+def player_logic():
+     #PLAYER animation
+     global current_frame_index
+     global player_gravity
+     if is_moving:
+          current_frame_index += animation_speed
+          if current_frame_index >= len(walk_frames):
+               current_frame_index = 0.0
+
+     player_surface = walk_frames[int(current_frame_index)]           
+     player_gravity += 1
+     player_rectangle.y += player_gravity
+     if player_rectangle.bottom >= 355 : player_rectangle.bottom = 355
+     screen.blit(player_surface, player_rectangle)
+
+
 
 def sky_movement():
      sky_surface_1_rect.x -= sky_surface_speed
@@ -75,17 +116,6 @@ def sky_movement():
      screen.blit(sky_surface_1, sky_surface_1_rect)
      screen.blit(sky_surface_2, sky_surface_2_rect)
 
-def ground_movement():
-     ground_surface_1_rect.x -= ground_surface_speed
-     ground_surface_2_rect.x -= ground_surface_speed
-
-     if (ground_surface_1_rect.right < 0):
-          ground_surface_1_rect.left = 798
-     if (ground_surface_2_rect.right < 0):
-          ground_surface_2_rect.left = 800  
-     
-     screen.blit(ground_surface_1, ground_surface_1_rect)
-     screen.blit(ground_surface_2, ground_surface_2_rect)
 
 def game_enemies(current_score):
      enemy_spawn_position = [290, 250, 240]
@@ -95,17 +125,10 @@ def game_enemies(current_score):
      if gost_rectangle.right < 0 :
           gost_rectangle.left = 800
           gost_rectangle.top = random.choice(enemy_spawn_position)
-          print(random.choice(enemy_spawn_position))
-
-          
-
 
      screen.blit(gost_surface, gost_rectangle)
 
-
-
-
-
+game_active = True
 
 while True:
     for event in pygame.event.get():
@@ -135,26 +158,14 @@ while True:
 
     if game_active:
         sky_movement()
-        ground_movement()
         current_score = display_score()
+        ground_movement(current_score)
 
         #ENEMYS
         game_enemies(current_score)
+        player_logic()
         
-
-        #PLAYER animation
-        if is_moving:
-             current_frame_index += animation_speed
-             if current_frame_index >= len(walk_frames):
-                  current_frame_index = 0.0
-
-        player_surface = walk_frames[int(current_frame_index)]           
-        player_gravity += 1
-        player_rectangle.y += player_gravity
-        if player_rectangle.bottom >= 355 : player_rectangle.bottom = 355
-        screen.blit(player_surface, player_rectangle)
-        
-        #COLLISION
+        #Gme_over_COLLISION
         if gost_rectangle.colliderect(player_rectangle):
             game_active = False
 
