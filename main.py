@@ -55,13 +55,13 @@ def ground_movement(current_score):
     ground_surface_2_rect.x -= ground_surface_speed
 
     if ground_surface_1_rect.right < 0:
-        ground_surface_1_rect.left = 798
+        ground_surface_1_rect.left = ground_surface_2_rect.right
         # Pick a new random level for piece 1 only
         ground_1_level = random.choice(ground_levels)
         ground_surface_1_rect.top = ground_1_level
 
     if ground_surface_2_rect.right < 0:
-        ground_surface_2_rect.left = 800
+        ground_surface_2_rect.left = ground_surface_1_rect.right
         # Pick a new random level for piece 2 only
         ground_2_level = random.choice(ground_levels)
         ground_surface_2_rect.top = ground_2_level
@@ -139,7 +139,7 @@ def player_ground_snaping_logic():
     # their feet have reached or passed the ground surface.
     # Before, the snap happened even when jumping upward through the ground.
     if player_gravity > 0 and player_rectangle.bottom >= ground_y:
-        player_rectangle.bottom = ground_y
+        player_rectangle.bottom = ground_y + 12
         player_gravity = 0  # FIX 5: Reset gravity to 0 on landing.
                             # Before, gravity kept increasing even after landing,
                             # so after a jump gravity would be a huge number and
