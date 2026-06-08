@@ -136,7 +136,7 @@ coin_frames = [
     pygame.image.load('graphics/coins/image_2.png').convert_alpha(),
 ]
 
-coin_heights = [344, 300, 250, 220, 190]
+coin_heights = [310, 280, 250, 220, 190]
 coins = []
 for i in range(3):
     x = 800 + (i * 300)
@@ -255,7 +255,15 @@ def game_enemies(current_score):
 
 def reset_game():
     # Resets all positions and levels to starting state
-    global ground_1_level, ground_2_level, player_gravity, start_time, is_moving
+    global ground_1_level, ground_2_level, player_gravity, start_time, is_moving, coins
+
+    coins.clear()
+    for i in range(3):
+        x = 800 + (i * 300)
+        y = random.choice(coin_heights)
+        rect = coin_surface_1.get_rect(midbottom=(x, y))
+        coins.append(rect)
+
     gost_rectangle.left = 800
     ground_1_level = ground_low
     ground_2_level = ground_low
