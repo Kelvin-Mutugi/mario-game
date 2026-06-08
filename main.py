@@ -14,7 +14,13 @@ def display_score():
 pygame.init()
 pygame.mixer.init()
 #SOUNDS
-jump_sound = pygame.mixer.Sound("assets/jump.wav")
+game_start_sound = pygame.mixer.Sound("sounds/game_start.wav")
+pygame.mixer.music.load("sounds/background_sound.ogg")
+pygame.mixer.music.set_volume(0.15)
+pygame.mixer.music.play(-1) 
+jump_sound = pygame.mixer.Sound("sounds/woosh.wav")
+game_over_sound = pygame.mixer.Sound("sounds/game_over.wav")
+
 
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption('Runner')
@@ -222,10 +228,12 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # FIX 6 applied: use is_player_grounded() for jump check
                 if player_rectangle.collidepoint(event.pos) and is_player_grounded():
+                    jump_sound.play()
                     player_gravity = -20
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and is_player_grounded():
+                    jump_sound.play()
                     player_gravity = -20
                 
 
@@ -280,8 +288,9 @@ while True:
             sky_surface_2_rect.x += sky_surface_speed
             
 
-
+        #collide logic
         if gost_rectangle.colliderect(player_rectangle):
+            game_over_sound.play()
             game_active = False
 
     else:
