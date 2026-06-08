@@ -2,13 +2,12 @@ import pygame
 from sys import exit
 import random
 
-
-def display_score():
-    current_time = int(pygame.time.get_ticks()/1000 - start_time)
-    score_surf = text_font.render(f'Score: {current_time}', False, 'Green')
+coins_collected = 0
+def display_score(coins_collected):
+    score_surf = text_font.render(f'Score: {coins_collected}', False, 'Green')
     score_rect = score_surf.get_rect(center=(400, 50))
     screen.blit(score_surf, score_rect)
-    return(current_time)
+    return(coins_collected)
 
 
 pygame.init()
@@ -148,13 +147,18 @@ current_coin_frame_index = 0.0
 coin_animation_speed = 0.15
 
 def coins_logic():
-    global current_coin_frame_index, coins
+    global current_coin_frame_index, coins, coins_collected
     
     current_coin_frame_index += coin_animation_speed
     if current_coin_frame_index >= len(coin_frames):
         current_coin_frame_index = 0.0
 
     for coin_rect in coins:
+        if player_rectangle.colliderect(coin_rect):
+            coins_collected += 1
+            coin_rect.left = 800  # respawn coin immediately after collection
+            coin_rect.bottom = random.choice(coin_heights)
+
         if is_moving:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_RIGHT]:
@@ -168,7 +172,6 @@ def coins_logic():
             coin_rect.bottom = random.choice(coin_heights)
 
         screen.blit(coin_frames[int(current_coin_frame_index)], coin_rect)
-
 
 
 
@@ -255,8 +258,9 @@ def game_enemies(current_score):
 
 def reset_game():
     # Resets all positions and levels to starting state
-    global ground_1_level, ground_2_level, player_gravity, start_time, is_moving, coins
+    global ground_1_level, ground_2_level, player_gravity, start_time, is_moving, coins, coins_collected
 
+    coins_collected = 0
     coins.clear()
     for i in range(3):
         x = 800 + (i * 300)
@@ -275,7 +279,6 @@ def reset_game():
     player_gravity = 0
     is_moving = False
     start_time = pygame.time.get_ticks() / 1000
-
 
 game_active = True
 
@@ -307,7 +310,7 @@ while True:
 
     if game_active:
         sky_movement()
-        current_score = display_score()
+        current_score = display_score(coins_collected)
         ground_movement(current_score)
         game_enemies(current_score)
         player_logic()
