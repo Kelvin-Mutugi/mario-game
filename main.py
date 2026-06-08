@@ -122,6 +122,19 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom=(80, 355))
 
+coin_frames = [
+    pygame.image.load('coins/image_11.png').convert_alpha(),
+    pygame.image.load('coins/image_10.png').convert_alpha(),
+    pygame.image.load('coins/image_9.png').convert_alpha(),
+    pygame.image.load('coins/image_8.png').convert_alpha(),
+    pygame.image.load('coins/image_7.png').convert_alpha(),
+    pygame.image.load('coins/image_6.png').convert_alpha(),
+    pygame.image.load('coins/image_5.png').convert_alpha(),
+    pygame.image.load('coins/image_4.png').convert_alpha(),
+    pygame.image.load('coins/image_3.png').convert_alpha(),
+    pygame.image.load('coins/image_2.png').convert_alpha(),
+]
+
 
 def get_ground_level_at_player():
     # Returns the y level of whichever ground piece is under the player's x.
