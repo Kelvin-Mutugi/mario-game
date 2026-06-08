@@ -31,8 +31,8 @@ start_instructions_font = pygame.font.Font(None, 40)
 player_character = 'graphics/player/mario_1.png'
 
 # Sky — two pieces that loop seamlessly
-sky_surface_1 = pygame.image.load('graphics/backgroung.png').convert()
-sky_surface_2 = pygame.image.load('graphics/backgroung.png').convert()
+sky_surface_1 = pygame.image.load('graphics/background.png').convert()
+sky_surface_2 = pygame.image.load('graphics/background_2.png').convert()
 sky_surface_1_rect = sky_surface_1.get_rect(left=0)
 sky_surface_2_rect = sky_surface_2.get_rect(left=800)
 sky_surface_speed = 1
