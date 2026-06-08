@@ -123,17 +123,24 @@ player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom=(80, 355))
 
 coin_frames = [
-    pygame.image.load('coins/image_11.png').convert_alpha(),
-    pygame.image.load('coins/image_10.png').convert_alpha(),
-    pygame.image.load('coins/image_9.png').convert_alpha(),
-    pygame.image.load('coins/image_8.png').convert_alpha(),
-    pygame.image.load('coins/image_7.png').convert_alpha(),
-    pygame.image.load('coins/image_6.png').convert_alpha(),
-    pygame.image.load('coins/image_5.png').convert_alpha(),
-    pygame.image.load('coins/image_4.png').convert_alpha(),
-    pygame.image.load('coins/image_3.png').convert_alpha(),
-    pygame.image.load('coins/image_2.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_11.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_10.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_9.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_8.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_7.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_6.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_5.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_4.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_3.png').convert_alpha(),
+    pygame.image.load('graphics/coins/image_2.png').convert_alpha(),
 ]
+current_coin_frame_index = 0.0
+coin_animation_speed = 0.15
+is_coin_collected = False
+
+def coins_logic():
+
+    return 0
 
 
 def get_ground_level_at_player():
@@ -267,6 +274,7 @@ while True:
         ground_movement(current_score)
         game_enemies(current_score)
         player_logic()
+        coins_logic()
 
         keys = pygame.key.get_pressed()
         is_moving = keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]
