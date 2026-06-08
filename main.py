@@ -20,6 +20,7 @@ pygame.mixer.music.set_volume(0.15)
 pygame.mixer.music.play(-1)
 jump_sound = pygame.mixer.Sound("sounds/woosh.wav")
 game_over_sound = pygame.mixer.Sound("sounds/game_over.wav")
+coin_collection_sound = pygame.mixer.Sound("sounds/coin_collection_sound.wav")
 
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption('Runner')
@@ -89,13 +90,9 @@ def ground_movement(current_score):
     screen.blit(ground_surface_1, ground_surface_1_rect)
     screen.blit(ground_surface_2, ground_surface_2_rect)
 
-
 start_time = 0
 
-# Game over screen
-Game_over_surface = text_font.render(f'Score:', False, 'Green')
-Game_over_rect = Game_over_surface.get_rect(midtop=(400, 50))
-
+# Game over screen (removed static Game_over_surface)
 game_over_character = pygame.image.load(player_character).convert_alpha()
 game_over_character_scaled = pygame.transform.scale_by(game_over_character, 1.5)
 game_over_character_rect = game_over_character.get_rect(center=(380, 190))
@@ -155,6 +152,7 @@ def coins_logic():
 
     for coin_rect in coins:
         if player_rectangle.colliderect(coin_rect):
+            coin_collection_sound.play()
             coins_collected += 1
             coin_rect.left = 800  # respawn coin immediately after collection
             coin_rect.bottom = random.choice(coin_heights)
@@ -342,7 +340,12 @@ while True:
 
     else:
         screen.blit(sky_surface_1, (0, 0))
+            
+        # Create and display final score dynamically
+        Game_over_surface = text_font.render(f'Score: {coins_collected}', False, 'Green')
+        Game_over_rect = Game_over_surface.get_rect(midtop=(400, 50))
         screen.blit(Game_over_surface, Game_over_rect)
+            
         screen.blit(game_over_character_scaled, game_over_character_rect)
         screen.blit(game_over_start_msg, game_over_start_msg_rect)
 
