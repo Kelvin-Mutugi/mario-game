@@ -122,9 +122,7 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom=(80, 355))
 
-coin = 1
 coin_surface_1 = pygame.image.load('graphics/coins/image_2.png').convert_alpha()
-coin_rect = coin_surface_1.get_rect(midbottom = (300,353))
 coin_frames = [
     pygame.image.load('graphics/coins/image_11.png').convert_alpha(),
     pygame.image.load('graphics/coins/image_10.png').convert_alpha(),
@@ -137,20 +135,39 @@ coin_frames = [
     pygame.image.load('graphics/coins/image_3.png').convert_alpha(),
     pygame.image.load('graphics/coins/image_2.png').convert_alpha(),
 ]
+
+coin_heights = [344, 300, 250, 220, 190]
+coins = []
+for i in range(3):
+    x = 800 + (i * 300)
+    y = random.choice(coin_heights)
+    rect = coin_surface_1.get_rect(midbottom=(x, y))
+    coins.append(rect)
+
 current_coin_frame_index = 0.0
 coin_animation_speed = 0.15
-is_coin_not_collected = True
-is_coin_1_spawn = False
 
 def coins_logic():
-    global current_coin_frame_index
-    if is_coin_not_collected:
-        current_coin_frame_index += coin_animation_speed
-        if current_coin_frame_index >= len(coin_frames):
-            current_coin_frame_index = 0.0
-    coin_surface_1 = coin_frames[int(current_coin_frame_index)]
-    screen.blit(coin_surface_1, coin_rect)
+    global current_coin_frame_index, coins
+    
+    current_coin_frame_index += coin_animation_speed
+    if current_coin_frame_index >= len(coin_frames):
+        current_coin_frame_index = 0.0
 
+    for coin_rect in coins:
+        if is_moving:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_RIGHT]:
+                coin_rect.x -= ground_surface_speed
+            if keys[pygame.K_LEFT]:
+                coin_rect.x += ground_surface_speed
+
+        # if coin goes off screen, respawn it ahead
+        if coin_rect.right < 0:
+            coin_rect.left = 800
+            coin_rect.bottom = random.choice(coin_heights)
+
+        screen.blit(coin_frames[int(current_coin_frame_index)], coin_rect)
 
 
 
