@@ -122,6 +122,8 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom=(80, 355))
 
+coin_surface = pygame.image.load('graphics/coins/image_2.png').convert_alpha()
+coin_rect = coin_surface.get_rect(midbottom = (100,300))
 coin_frames = [
     pygame.image.load('graphics/coins/image_11.png').convert_alpha(),
     pygame.image.load('graphics/coins/image_10.png').convert_alpha(),
@@ -136,11 +138,19 @@ coin_frames = [
 ]
 current_coin_frame_index = 0.0
 coin_animation_speed = 0.15
-is_coin_collected = False
+is_coin_not_collected = True
 
 def coins_logic():
+    global current_coin_frame_index
+    if is_coin_not_collected:
+        current_coin_frame_index += coin_animation_speed
+        if current_coin_frame_index >= len(coin_frames):
+            current_coin_frame_index = 0.0
+    coin_surface = coin_frames[int(current_coin_frame_index)]
+    screen.blit(coin_surface, coin_rect)
 
-    return 0
+
+
 
 
 def get_ground_level_at_player():
@@ -278,6 +288,7 @@ while True:
 
         keys = pygame.key.get_pressed()
         is_moving = keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]
+
 
         if keys[pygame.K_RIGHT]:
             ground_surface_1_rect.x -= ground_surface_speed
