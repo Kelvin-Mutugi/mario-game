@@ -122,8 +122,9 @@ player_gravity = 0
 player_surface = pygame.image.load(player_character).convert_alpha()
 player_rectangle = player_surface.get_rect(midbottom=(80, 355))
 
-coin_surface = pygame.image.load('graphics/coins/image_2.png').convert_alpha()
-coin_rect = coin_surface.get_rect(midbottom = (100,300))
+coin = 1
+coin_surface_1 = pygame.image.load('graphics/coins/image_2.png').convert_alpha()
+coin_rect = coin_surface_1.get_rect(midbottom = (300,353))
 coin_frames = [
     pygame.image.load('graphics/coins/image_11.png').convert_alpha(),
     pygame.image.load('graphics/coins/image_10.png').convert_alpha(),
@@ -139,6 +140,7 @@ coin_frames = [
 current_coin_frame_index = 0.0
 coin_animation_speed = 0.15
 is_coin_not_collected = True
+is_coin_1_spawn = False
 
 def coins_logic():
     global current_coin_frame_index
@@ -146,8 +148,8 @@ def coins_logic():
         current_coin_frame_index += coin_animation_speed
         if current_coin_frame_index >= len(coin_frames):
             current_coin_frame_index = 0.0
-    coin_surface = coin_frames[int(current_coin_frame_index)]
-    screen.blit(coin_surface, coin_rect)
+    coin_surface_1 = coin_frames[int(current_coin_frame_index)]
+    screen.blit(coin_surface_1, coin_rect)
 
 
 
