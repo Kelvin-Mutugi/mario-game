@@ -54,10 +54,9 @@ ground_surface_2_rect = ground_surface_2.get_rect(topleft=(800, ground_2_level))
 
 # Trees — two pieces, same speed as ground, bottom anchored to ground level
 background_trees_surf_1 = pygame.image.load('graphics/background_trees_1.png').convert_alpha()
-background_trees_rect_1 = background_trees_surf_1.get_rect(bottomleft=(0, ground_1_level))
+background_trees_rect_1 = background_trees_surf_1.get_rect(bottomleft=(0, ground_1_level + 10))
 background_trees_surf_2 = pygame.image.load('graphics/background_trees_2.png').convert_alpha()
-background_trees_rect_2 = background_trees_surf_2.get_rect(bottomleft=(800, ground_2_level))
-
+background_trees_rect_2 = background_trees_surf_2.get_rect(bottomleft=(800, ground_2_level + 10))
 # Both trees and ground move at the same speed
 ground_surface_speed = 5
 background_speed = 5
@@ -73,15 +72,17 @@ def ground_movement(current_score):
         ground_surface_1_rect.left = ground_surface_2_rect.right
         ground_1_level = random.choice(ground_levels)
         ground_surface_1_rect.top = ground_1_level
+        background_trees_rect_1.left = ground_surface_1_rect.left
         # Tree y updates at the same moment ground changes — fixes floating tree bug
-        background_trees_rect_1.bottom = ground_1_level
+        background_trees_rect_1.bottom = ground_1_level + 10
 
     if ground_surface_2_rect.right < 0:
         ground_surface_2_rect.left = ground_surface_1_rect.right
         ground_2_level = random.choice(ground_levels)
         ground_surface_2_rect.top = ground_2_level
+        background_trees_rect_2.left = ground_surface_2_rect.left
         # Tree y updates at the same moment ground changes — fixes floating tree bug
-        background_trees_rect_2.bottom = ground_2_level
+        background_trees_rect_2.bottom = ground_2_level + 10
 
     # Draw trees before ground so ground renders on top
     screen.blit(background_trees_surf_1, background_trees_rect_1)
@@ -211,8 +212,8 @@ def reset_game():
     ground_2_level = ground_low
     ground_surface_1_rect.topleft = (0, ground_low)
     ground_surface_2_rect.topleft = (800, ground_low)
-    background_trees_rect_1.bottomleft = (0, ground_low)
-    background_trees_rect_2.bottomleft = (800, ground_low)
+    background_trees_rect_1.bottomleft = (0, ground_low + 10)
+    background_trees_rect_2.bottomleft = (800, ground_low + 10)
     player_rectangle.midbottom = (80, ground_low)
     player_gravity = 0
     is_moving = False
