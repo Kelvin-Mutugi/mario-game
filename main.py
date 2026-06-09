@@ -28,7 +28,7 @@ clock = pygame.time.Clock()
 text_font = pygame.font.Font(None, 50)
 start_instructions_font = pygame.font.Font(None, 40)
 
-player_character = 'graphics/player/mario_1.png'
+player_character = 'graphics/player/Run_1.png'
 
 # Sky — two pieces that loop seamlessly
 sky_surface_1 = pygame.image.load('graphics/background.png').convert()
@@ -106,10 +106,23 @@ gost_rectangle = gost_surface.get_rect(top=290)
 gost_speed = 6
 
 # Player animation frames
+# walk_frames = [
+    # pygame.image.load('graphics/player/mario_1.png').convert_alpha(),
+    # pygame.image.load('graphics/player/mario_2.png').convert_alpha(),
+# ]
+
+# Player animation frames
 walk_frames = [
-    pygame.image.load('graphics/player/mario_1.png').convert_alpha(),
-    pygame.image.load('graphics/player/mario_2.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_1.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_2.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_3.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_4.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_5.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_6.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_7.png').convert_alpha(),
+    pygame.image.load('graphics/player/Run_8.png').convert_alpha(),
 ]
+
 current_frame_index = 0.0
 animation_speed = 0.15
 is_moving = False
